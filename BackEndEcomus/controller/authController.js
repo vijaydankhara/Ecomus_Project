@@ -6,14 +6,20 @@ const jwt = require('jsonwebtoken');
 exports.registerUser = async(req, res) => {
     try {
         let admin = await authServices.getUser({ email: req.body.email });
-        console.log(admin);
+        // console.log(admin);
         if(admin){
             return res.status(400).json({ message: `Admin is Already Registerd...`});
         }
         let hashPassword = await bcrypt.hash(req.body.password, 10);
-        console.log(hashPassword);
+        // console.log(hashPassword);
+
+    //    Format the dateOfBirth to DD-MM-YYYY
+        const { dateOfBirth  } = req.body; 
+        const formattedDateOfBirth = new Date(dateOfBirth);
+
         admin = await authServices.addNewUser({
             ...req.body,
+            dateOfBirth: formattedDateOfBirth,
             password: hashPassword,
             isAdmin: true
         });

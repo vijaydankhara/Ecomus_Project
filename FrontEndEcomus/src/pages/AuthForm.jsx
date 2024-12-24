@@ -51,7 +51,7 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto my-10 p-6 border border-gray-300 rounded-lg shadow-lg">
+    <div className="max-w-md mx-auto my-10 p-6 border border-gray-300 rounded-lg shadow-lg bg-[#f99eb3]">
       <h2 className="text-2xl font-bold mb-5 text-center">{isLogin ? 'User Login' : 'User Registration'}</h2>
       <form onSubmit={handleSubmit}>
         {!isLogin && (
