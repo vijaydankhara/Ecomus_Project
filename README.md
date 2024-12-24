@@ -2,7 +2,7 @@
 
 ## Frontend Project Setup
 
-npm init -y             -> Project Initialization
+npm init -y             -> Project Initialization <br/>
 npm i nodemon           -> Automatically restarts the server
 npm i express           -> Web framework for building RESTful APIs.
 npm i mongoose          -> ODM (Object Data Modeling) library for MongoDB and Node.js.
