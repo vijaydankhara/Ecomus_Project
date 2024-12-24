@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -24,24 +28,25 @@ const AuthForm = () => {
     e.preventDefault();
     if (isLogin) {
       try {
-        const response = await axios.post('http://localhost:1122/api/user/login', {
+        const response = await axios.post('http://localhost:1122/api/user/loginuser', {
           email: formData.email,
           password: formData.password,
         });
         toast.success('Login successful!', { position: 'top-right' });
+        setIsAuthenticated(true);
+        navigate("/shop");
       } catch (error) {
         console.error('Error logging in:', error);
-        toast.error('Invalid email or password');
+        toast.error('Invalid email or password', { position: 'top-right' });
       }
     } else {
       try {
         const response = await axios.post('http://localhost:1122/api/user/registerAuth', formData);
         toast.success('User registered successfully!', { position: 'top-right' });
-        // Redirect to login form after successful registration
         setIsLogin(true);
       } catch (error) {
         console.error('Error registering user:', error);
-        toast.error('Error registering user');
+        toast.error('Error registering user', { position: 'top-right' });
       }
     }
   };
@@ -50,8 +55,24 @@ const AuthForm = () => {
     setIsLogin(!isLogin);
   };
 
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      mobileNo: '',
+      password: '',
+      gender: '',
+      dateOfBirth: '',
+      address: '',
+    });
+    toast.success('Logged out successfully!', { position: 'top-right' });
+  };
+
   return (
     <div className="max-w-md mx-auto my-10 p-6 border border-gray-300 rounded-lg shadow-lg bg-[#f99eb3]">
+      <Toaster />
       <h2 className="text-2xl font-bold mb-5 text-center">{isLogin ? 'User Login' : 'User Registration'}</h2>
       <form onSubmit={handleSubmit}>
         {!isLogin && (
@@ -162,13 +183,24 @@ const AuthForm = () => {
             required
           />
         </div>
+        {isLogin && (
+          <div className="mb-4">
+            <a href="/forgot-password" className="text-blue-500 hover:underline">Forgot Password?</a>
+          </div>
+        )}
         <button type="submit" className="w-full py-2 px-4 bg-green-500 text-white rounded hover:bg-green-700">
           {isLogin ? 'Login' : 'Register'}
         </button>
       </form>
-      <button className="mt-4 w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700" onClick={toggleForm}>
-        {isLogin ? 'Switch to Registration' : 'Switch to Login'}
-      </button>
+      {isAuthenticated ? (
+        <button className="mt-4 w-full py-2 px-4 bg-red-500 text-white rounded hover:bg-red-700" onClick={handleLogout}>
+          Logout
+        </button>
+      ) : (
+        <button className="mt-4 w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700" onClick={toggleForm}>
+          {isLogin ? 'Switch to Registration' : 'Switch to Login'}
+        </button>
+      )}
     </div>
   );
 };

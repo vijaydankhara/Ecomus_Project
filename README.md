@@ -12,5 +12,6 @@ npm i jsonwebtoken      -> Library to create and verify JSON Web Tokens (JWT).<b
 npm i multer            -> Middleware for handling file uploads.<br/>
 npm i dotenv            -> Loads environment variables from a .env file into process.env.<br/>
 npm i cors              -> Middleware to enable Cross-Origin Resource Sharing.<br/>
+npm i morgan            -> Morgan is a middleware for Node.jsthat serves as a HTTP request logger.<br/>
 </pre>
 

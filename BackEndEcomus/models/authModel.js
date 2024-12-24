@@ -29,25 +29,26 @@ const authSchema = mongoose.Schema(
       enum: ["Male", "Female", "Other"],
     },
     dateOfBirth: {
-      type: Date,
+      type: String,
       require: true,
     },
     address: {
       type: String,
       require: true,
     },
-    createdAt: {
-      type: Date,
-      default: Date.Now,
+    isDelete: {
+      type: Boolean,
+      default: false
     },
-    updatedAt: {
-      type: Date,
-      default: Date.Now,
-    },
+    isAdmin: {
+      type: Boolean,
+      default: false
+    }
   },
   {
-    versionKey: false,
+    timestamps: true,
+    versionKey: false
   }
 );
 
-module.exports =mongoose.model('User',authSchema);
+module.exports = mongoose.model('User', authSchema);

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 //icon
 
@@ -7,9 +7,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { TbArrowsCross } from "react-icons/tb";
 // import { BiSolidShow } from "react-icons/bi";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { BestSellerProductData } from '../data/Constants';
-
-
+import { BestSellerProductData } from "../data/Constants";
 
 // images
 // import seller_img_1 from '../assets/asset_16.jpeg'
@@ -41,9 +39,9 @@ import { BestSellerProductData } from '../data/Constants';
 // icon
 
 import { BiDollar } from "react-icons/bi";
-import ProductDisplayCard from './ProductDisplayCard';
+import ProductDisplayCard from "./ProductDisplayCard";
 
-// 
+//
 
 // const seller = [
 //     {
@@ -132,43 +130,32 @@ import ProductDisplayCard from './ProductDisplayCard';
 //     },
 // ]
 
-
 const Bestseller = () => {
-    return (
-        <div className=''>
-
-            <div className='overflow-x-hidden'>
-                <div className='grid  grid-cols-2 md:grid-cols-3 lg-1150:grid-cols-4 gap-4 lg:gap-8  px-[14px] sm:px-4 md:px-6 lg:px-12  my-5 '>
-                    {
-                        BestSellerProductData.map((current) => {
-
-                            return (
-
-                                <ProductDisplayCard key={current.id} product={current} />
-
-                            )
-                        }
-                        )
-                    }
-                </div>
-            </div>
-
-            <div className='flex justify-center my-4 '>
-                <button className='border border-black rounded py-3 px-7 hover:duration-300 font-semibold duration-300 hover:text-[red] hover:border-[red] text-sm'  >Load More</button>
-            </div>
-
+  return (
+    <div className="">
+      <div className="overflow-x-hidden  ">
+        <div className="grid  grid-cols-2 md:grid-cols-3 lg-1150:grid-cols-4 gap-4 lg:gap-8  px-[14px] sm:px-4 md:px-6 lg:px-12  my-5  ">
+          {BestSellerProductData.map((current) => {
+            return <ProductDisplayCard key={current.id} product={current} />;
+          })}
         </div>
-    )
-}
+      </div>
 
-export default Bestseller
+      <div className="flex justify-center my-4 ">
+        <button className="border border-black rounded py-3 px-7 hover:duration-300 font-semibold duration-300 hover:text-[red] hover:border-[red] text-sm">
+          Load More
+        </button>
+      </div>
+    </div>
+  );
+};
 
+export default Bestseller;
 
 // function SellerDetails({ details }) {
 
 //     return (
 //         <div className=' h-fit rounded-md mt-5 m-auto '>
-
 
 //             <div className=" h-fit w-fit rounded-md overflow-hidden relative group/card">
 //                 <a href="">
@@ -205,7 +192,6 @@ export default Bestseller
 //                 </div>
 
 //             </div>
-
 
 //             <div className=" text-left text-sm md:text-base">
 
