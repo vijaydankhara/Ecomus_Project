@@ -1,6 +1,7 @@
 # Ecomus_Project
 
 ## Frontend Project Setup
+<pre>
 
 npm init -y             -> Project Initialization. <br/>
 npm i nodemon           -> Automatically restarts the server. <br/>
@@ -11,4 +12,5 @@ npm i jsonwebtoken      -> Library to create and verify JSON Web Tokens (JWT).<b
 npm i multer            -> Middleware for handling file uploads.<br/>
 npm i dotenv            -> Loads environment variables from a .env file into process.env.<br/>
 npm i cors              -> Middleware to enable Cross-Origin Resource Sharing.<br/>
+</pre>
 
