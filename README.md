@@ -1,6 +1,6 @@
 # Ecomus_Project
 
-## Frontend Project Setup
+## BackEnd Project Setup
 <pre>
 
 npm init -y             -> Project Initialization. <br/>
