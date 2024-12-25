@@ -50,4 +50,62 @@ exports.loginUser = async (req, res) => {
     }
 }
 
+// Get All User
+exports.getAllUser = async(req, res) => {
+    try {
+        let users = await userService.getAllUsers({ isDelete: false});
+        console.log(users);
+        if(!users){
+            return res.status(404).json({ message: `Users Data Not Found Please Try Again..!`});
+        }
+        res.status(200).json(users);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: `Internal Server Error...${console.error()}`})        
+    }
+};
+exports.getUser = async (req, res) => {
+    try {
+      const userId = req.params.id; // Use params instead of query
+      const user = await userService.getUserById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User Not Found. Please Try Again." });
+      }
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: `Internal Server Error` });
+    }
+  };
+  
+  exports.updateUser = async (req, res) => {
+    try {
+      const userId = req.params.id; // Use params instead of query
+      const user = await userService.getUserById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User Not Found. Please Try Again." });
+      }
+      const updatedUser = await userService.updateUser(userId, req.body);
+      res.status(200).json({ user: updatedUser, message: "User Details Updated Successfully." });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: `Internal Server Error` });
+    }
+  };
+  
+// Delete User
+exports.deleteUser = async(req, res) => {
+    try {
+        let user = await userService.getUserById(req.query.userId);
+        if(!user){
+            return res.status(404).json({message: `User Not Found...Please Try Again`})
+        }
+        user = await userService.updateUser(user._id, {isDelete: true});
+        res.status(200).json({mmessage: `User Deleted SuccesFully.....`})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: `Internal Server Error...${console.error()}`});
+    }
+};
+
 

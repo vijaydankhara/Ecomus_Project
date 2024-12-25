@@ -8,6 +8,7 @@ import Pages from '../pages/Pages'
 import Navbar from '../components/Navbar'
 import AboutUs from '../pages/AboutUs'
 import AuthForm from '../pages/AuthForm'
+import UserProfile from '../pages/UserProfile'
 
 import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom'
 
@@ -50,6 +51,10 @@ const navList = createBrowserRouter([
             {
                 path: '/authform',
                 element: <AuthForm/>
+            },
+            {
+                path: '/userprofile',
+                element: <UserProfile/>
             },
         ]
     }

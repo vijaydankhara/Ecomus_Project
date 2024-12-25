@@ -6,6 +6,7 @@ import { RiShoppingBag2Line } from "react-icons/ri";
 import { FaRegHeart } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { RiMenu2Fill } from "react-icons/ri";
+import { IoMdLogIn } from "react-icons/io";
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import {
     Sheet,
@@ -37,7 +38,7 @@ const Navbar = () => {
                                         <li> <NavLink to='/'>Home</NavLink></li>
                                         <li> <NavLink to='/shop'>Shop</NavLink></li>
                                         <li> <NavLink to='/product'>Products</NavLink></li>
-                                        {/* <li onClick={page_details()}> <NavLink to='/page' className='flex place-items-center gap-1' >Pages <IoIosArrowDown className='relative top-0.5' /></NavLink> */}
+                                     
                                         <li className=''> <NavLink to='/about'>About</NavLink></li>
 
                                         {/* </li> */}
@@ -75,7 +76,9 @@ const Navbar = () => {
                     {/* icon */}
                     <div className='flex gap-1 md:gap-3 mr-10 md:mr-12 lg:mr-14 xl:mr-16 text-lg *:*:duration-300 '>
                         <Link><IoSearch className='hover:text-red-600' /></Link>
-                        <NavLink to={'/authform'} ><FiUser className=' max-md:hidden hover:text-red-600' /></NavLink>
+                        <NavLink to={'/authform'} ><IoMdLogIn className=' max-md:hidden hover:text-red-600' /></NavLink>
+                        <NavLink to={'/userprofile'} ><FiUser className=' max-md:hidden hover:text-red-600' /></NavLink>
+                      
                         <Link><FaRegHeart className=' max-md:hidden hover:text-red-600' /></Link>
                         <Link><RiShoppingBag2Line className='hover:text-red-600' /></Link>
                     </div>

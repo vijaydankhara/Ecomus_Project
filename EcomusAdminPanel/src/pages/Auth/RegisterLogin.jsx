@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 
-const AuthForm = () => {
+
+const RegisterLogin = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -29,13 +29,12 @@ const AuthForm = () => {
     e.preventDefault();
     if (isLogin) {
       try {
-        const response = await axios.post('http://localhost:1122/api/user/loginuser', {
+        const response = await axios.post('http://localhost:1122/api/admin/loginadmin', {
           email: formData.email,
           password: formData.password,
         });
         toast.success('Login successful!', { position: 'top-right' });
         setIsAuthenticated(true);
-        setUserEmail(formData.email);
         navigate("/shop");
       } catch (error) {
         console.error('Error logging in:', error);
@@ -43,7 +42,7 @@ const AuthForm = () => {
       }
     } else {
       try {
-        const response = await axios.post('http://localhost:1122/api/user/registerAuth', formData);
+        const response = await axios.post('http://localhost:1122/api/admin/registeradmin', formData);
         toast.success('User registered successfully!', { position: 'top-right' });
         setIsLogin(true);
       } catch (error) {
@@ -59,7 +58,6 @@ const AuthForm = () => {
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    setUserEmail('');
     setFormData({
       firstName: '',
       lastName: '',
@@ -68,20 +66,16 @@ const AuthForm = () => {
       password: '',
       gender: '',
       dateOfBirth: '',
-      address: '',
+    
     });
     toast.success('Logged out successfully!', { position: 'top-right' });
   };
 
   return (
-    <div className="max-w-md mx-auto my-10 p-6 border border-gray-300 rounded-lg shadow-lg bg-[#f99eb3] relative">
+    <div className="max-w-md mx-auto my-10 p-6 border border-gray-300 rounded-lg shadow-lg bg-[#f4ad5c]">
+      <Link to={"/"} className="text-red-500 font-bold font-serif ">Back</Link>
       <Toaster />
-      {isAuthenticated && (
-        <div className="absolute top-0 right-0 p-4 text-gray-700 font-bold">
-          {userEmail}
-        </div>
-      )}
-      <h2 className="text-2xl font-bold mb-5 text-center">{isLogin ? 'User Login' : 'User Registration'}</h2>
+      <h2 className="text-2xl font-bold mb-5 text-center">{isLogin ? 'Admin Login' : 'Admin Registration'}</h2>
       <form onSubmit={handleSubmit}>
         {!isLogin && (
           <>
@@ -152,18 +146,7 @@ const AuthForm = () => {
                 required
               />
             </div>
-            <div className="mb-4">
-              <label htmlFor="address" className="block text-gray-700">Address</label>
-              <textarea
-                id="address"
-                name="address"
-                placeholder="England"
-                value={formData.address}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-                required
-              ></textarea>
-            </div>
+            
           </>
         )}
         <div className="mb-4">
@@ -213,4 +196,6 @@ const AuthForm = () => {
   );
 };
 
-export default AuthForm;
+export default RegisterLogin;
+
+

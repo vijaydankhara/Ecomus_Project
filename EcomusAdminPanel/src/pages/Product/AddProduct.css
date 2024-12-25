@@ -1,0 +1,74 @@
+.add-product-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+  font-family: serif;
+  font-weight: 400;
+  letter-spacing: 0.3cap;
+}
+
+
+.add-product-form .form-group {
+  margin-bottom: 15px;
+}
+
+.add-product-form .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.add-product-form .form-group input[type="text"],
+.add-product-form .form-group input[type="number"],
+.add-product-form .form-group input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.add-product-form .form-group .checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.add-product-form .form-group .checkbox-group label {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.add-product-form .form-group .checkbox-group input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.add-product-form .submit-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-product-form .submit-button:hover {
+  background-color: #45a049;
+}
