@@ -13,15 +13,19 @@ function Layout() {
   return (
     <div>
       <BrowserRouter>
+
         <Routes>
-          <Route path="/navbar" element={<Navbar />} />
+          <Route path="/" element={<Navbar />} >
+
+            <Route path="/registerlogin" element={<RegisterLogin />} />
+            <Route path="/addproduct" element={<AddProduct />} />
+            <Route path="/producttabal" element={<ProductTabal />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/profile" element={<Profile />} />
+
+          </Route>
           <Route path="/sidebar" element={<Sidebar />} />
-          <Route path="/registerlogin" element={<RegisterLogin />} />
-          <Route path="/addproduct" element={<AddProduct />} />
-          <Route path="/producttabal" element={<ProductTabal />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </div>

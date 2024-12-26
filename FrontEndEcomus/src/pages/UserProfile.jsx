@@ -14,6 +14,7 @@ function UserProfile() {
   const navigate = useNavigate();
   const [user, setUser] = useState(initialUser);
 
+console.log("inti user---->",initialUser);
 
   const inputChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +26,8 @@ function UserProfile() {
       .get(`http://localhost:1122/api/user/getuser/${id}`)
       .then((response) => {
         setUser(response.data || initialUser);
+        console.log("my res ->>>",response);
+        
       })
       .catch((error) => {
         console.error("Error fetching user:", error);
@@ -51,7 +54,7 @@ function UserProfile() {
       <Link to="/" className="text-red-500 font-bold font-serif mb-5 block">
         Back
       </Link>
-      <h3 className="text-2xl font-bold mb-5 text-center">Update User</h3>
+      <h3 className="text-2xl font-bold mb-5 text-center">User Update </h3>
 
       <form onSubmit={handleSubmit}>
         {/* First Name */}

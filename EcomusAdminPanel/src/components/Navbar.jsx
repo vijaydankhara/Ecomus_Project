@@ -15,9 +15,12 @@ function Navbar() {
       <div className="main-content flex flex-col w-full">
         <div className="navbar flex justify-between items-center">
           <div className="flex items-center">
+          <NavLink to='/'>
+
             <div className="logo">
               <img src={logo} alt="Logo" />
             </div>
+          </NavLink>
           </div>
           <h1 className="text-center flex-grow">ADMIN PANEL</h1>
           <div className="navbar-icons flex">
