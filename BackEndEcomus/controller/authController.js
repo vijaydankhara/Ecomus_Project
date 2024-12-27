@@ -53,7 +53,7 @@ exports.loginUser = async (req, res) => {
 // Get All User
 exports.getAllUser = async(req, res) => {
     try {
-        let users = await userService.getAllUsers({ isDelete: false});
+        let users = await authServices.getAllUsers({ isDelete: false});
         console.log(users);
         if(!users){
             return res.status(404).json({ message: `Users Data Not Found Please Try Again..!`});
@@ -66,26 +66,25 @@ exports.getAllUser = async(req, res) => {
 };
 exports.getUser = async (req, res) => {
     try {
-      const userId = req.params.id; // Use params instead of query
-      const user = await userService.getUserById(userId);
-      if (!user) {
-        return res.status(404).json({ message: "User Not Found. Please Try Again." });
+        const id = req.params.id;
+        const userExit = await authServices.getUserById(id);
+        if(!userExit){
+          return res.status(404).json({msg: "User Not Found"});
+        }
+        res.status(200).json(userExit)
+      } catch (error) {
+        res.status(500).json({error: error.message});
       }
-      res.status(200).json(user);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: `Internal Server Error` });
-    }
-  };
+      }
   
   exports.updateUser = async (req, res) => {
     try {
       const userId = req.params.id; // Use params instead of query
-      const user = await userService.getUserById(userId);
+      const user = await authServices.getUserById(userId);
       if (!user) {
         return res.status(404).json({ message: "User Not Found. Please Try Again." });
       }
-      const updatedUser = await userService.updateUser(userId, req.body);
+      const updatedUser = await authServices.updateUser(userId, req.body);
       res.status(200).json({ user: updatedUser, message: "User Details Updated Successfully." });
     } catch (error) {
       console.error(error);
@@ -96,7 +95,7 @@ exports.getUser = async (req, res) => {
 // Delete User
 exports.deleteUser = async(req, res) => {
     try {
-        let user = await userService.getUserById(req.query.userId);
+        let user = await authServices.getUserById(req.query.userId);
         if(!user){
             return res.status(404).json({message: `User Not Found...Please Try Again`})
         }

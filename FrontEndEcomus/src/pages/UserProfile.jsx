@@ -3,6 +3,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 function UserProfile() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   const initialUser = {
     firstName: "",
     lastName: "",
@@ -10,54 +13,91 @@ function UserProfile() {
     dateOfBirth: "",
     address: "",
   };
-  const { id } = useParams(); 
-  const navigate = useNavigate();
-  const [user, setUser] = useState(initialUser);
 
-console.log("inti user---->",initialUser);
+  const [user, setUser] = useState(initialUser);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch user details
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+
+        if (!token) {
+          throw new Error("Unauthorized: Token not found");
+        }
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const response = await axios.get(
+          `http://localhost:1122/api/user/getuser/${id}`,
+          config
+        );
+        setUser(response.data || initialUser);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        setError("Failed to fetch user data. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [id]);
 
   const inputChange = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setUser((prevState) => ({ ...prevState, [name]: value }));
   };
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:1122/api/user/getuser/${id}`)
-      .then((response) => {
-        setUser(response.data || initialUser);
-        console.log("my res ->>>",response);
-        
-      })
-      .catch((error) => {
-        console.error("Error fetching user:", error);
-        setUser(initialUser);
-      });
-  }, [id]);
-  
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .put(`http://localhost:1122/api/user/updateuser/${id}`, user)
-      .then((response) => {
-        alert(response.data.message || "User updated successfully");
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error("Error updating user:", error);
-      });
+    try {
+      const token = localStorage.getItem("authToken");
+
+      if (!token) {
+        throw new Error("Unauthorized: Token not found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.put(
+        `http://localhost:1122/api/user/updateuser/${id}`,
+        user,
+        config
+      );
+
+      alert(response.data.message || "User updated successfully");
+      navigate("/");
+    } catch (err) {
+      console.error("Error updating user:", err);
+      setError("Failed to update user data. Please try again.");
+    }
   };
-  
+
+  if (isLoading) {
+    return <div className="text-center my-10">Loading...</div>;
+  }
 
   return (
-    <div className="max-w-md mx-auto my-10 p-6 border border-gray-300 rounded-lg shadow-lg bg-white">
-      <Link to="/" className="text-red-500 font-bold font-serif mb-5 block">
+    <div className="max-w-md mx-auto my-10 p-6 border border-blue-800 bg-orange-200 rounded-lg shadow-lg">
+      <Link to="/" className="text-green-800 font-bold font-serif mb-5 block">
         Back
       </Link>
-      <h3 className="text-2xl font-bold mb-5 text-center">User Update </h3>
+      <h3 className="text-2xl font-bold mb-5 text-center">User Update</h3>
+
+      {error && <div className="mb-4 text-red-500">{error}</div>}
 
       <form onSubmit={handleSubmit}>
-        {/* First Name */}
         <div className="mb-4">
           <label htmlFor="firstName" className="block text-gray-700 mb-2">
             First Name
@@ -71,8 +111,6 @@ console.log("inti user---->",initialUser);
             required
           />
         </div>
-
-        {/* Last Name */}
         <div className="mb-4">
           <label htmlFor="lastName" className="block text-gray-700 mb-2">
             Last Name
@@ -86,8 +124,6 @@ console.log("inti user---->",initialUser);
             required
           />
         </div>
-
-        {/* Mobile Number */}
         <div className="mb-4">
           <label htmlFor="mobileNo" className="block text-gray-700 mb-2">
             Mobile Number
@@ -101,8 +137,6 @@ console.log("inti user---->",initialUser);
             required
           />
         </div>
-
-        {/* Date of Birth */}
         <div className="mb-4">
           <label htmlFor="dateOfBirth" className="block text-gray-700 mb-2">
             Date of Birth
@@ -116,8 +150,6 @@ console.log("inti user---->",initialUser);
             required
           />
         </div>
-
-        {/* Address */}
         <div className="mb-4">
           <label htmlFor="address" className="block text-gray-700 mb-2">
             Address
@@ -130,8 +162,6 @@ console.log("inti user---->",initialUser);
             required
           ></textarea>
         </div>
-
-        {/* Submit Button */}
         <div className="mt-6">
           <button
             type="submit"

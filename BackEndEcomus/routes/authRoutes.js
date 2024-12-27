@@ -6,9 +6,9 @@ const {registerUser,loginUser,getUser,getAllUser,updateUser,deleteUser} = requir
 
 userRoutes.post('/registerAuth',registerUser);
 userRoutes.post('/loginuser',loginUser);
-userRoutes.get('/getuser/:id', userVerifyToken, getUser);
+userRoutes.get('/getuser/:id', userVerifyToken,getUser);
 userRoutes.get('/getalluser',userVerifyToken,getAllUser);
-userRoutes.put('/updateuser/:id', userVerifyToken, updateUser);
+userRoutes.put('/updateuser/:id', userVerifyToken,updateUser);
 userRoutes.delete('/deleteuser/:id',userVerifyToken,deleteUser);
 
 module.exports = userRoutes
