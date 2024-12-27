@@ -2,14 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
+
 function UserProfile() {
-
   const navigate = useNavigate();
-  const {_id} = useParams();
-  const API = `http://localhost:1122/api/user/getuser/${_id}`
-
-  console.log(API);
-  
+  const { id } = useParams(); 
+  const API = `http://localhost:1122/api/user/getuser/${id}`;
 
   const initialUser = {
     firstName: "",
@@ -19,29 +16,23 @@ function UserProfile() {
     address: "",
   };
 
-  console.log("initialUser" , initialUser);
-  
-
   const [user, setUser] = useState(initialUser);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch user details
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem("userToken");
         if (!token) {
           throw new Error("Unauthorized: Token not found");
         }
         const config = {
           headers: {
-            authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         };
-        const response = await axios.get(API , config);
-        console.log(response.data);
-        
+        const response = await axios.get(API, config);
         setUser(response.data || initialUser);
       } catch (err) {
         console.error("Error fetching user data:", err);
@@ -51,10 +42,9 @@ function UserProfile() {
       }
     };
     fetchUser();
-  }, [_id]);
+  }, [API]);
 
   const inputChange = (e) => {
-    e.preventDefault()
     const { name, value } = e.target;
     setUser((prevState) => ({ ...prevState, [name]: value }));
   };
@@ -62,13 +52,13 @@ function UserProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem("userToken");
       if (!token) {
         throw new Error("Unauthorized: Token not found");
       }
       const config = {
         headers: {
-          authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
 

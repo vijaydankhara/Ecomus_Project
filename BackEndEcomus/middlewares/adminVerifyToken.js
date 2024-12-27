@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/authModel');
+const Admin = require('../models/authModel');
 const token =  require('morgan');
 
-exports.userVerifyToken = async(req, res, next) => {
+exports.adminVerifyToken = async(req, res, next) => {
     try {
        const authorization = req.headers['authorization'];
        if(authorization === undefined){
@@ -13,19 +13,19 @@ exports.userVerifyToken = async(req, res, next) => {
        if (token === undefined) {
            return res.status(401).json({ message: `Unauthorize ${console.error()}`})
        }else{
-            const {userId} = jwt.verify(token, 'User');
+            const {adminId: adminId} = jwt.verify(token, 'Admin');
             // console.log(userId);
-            const user = await User.findById(userId);
+            const admin = await Admin.findById(adminId);
             // console.log(user);
-            if (user) {
-                req.user = user;
+            if (admin) {
+                req.admin = admin;
                 next();
             }else{
-                return res.status(401).json({ message: `Invalid User(token) ${console.error()}`});
+                return res.status(401).json({ message: `Invalid Admin(token) ${console.error()}`});
             }
        } 
     } catch (error) {
         console.log(error);
-        res.json({ message: `Internal Server Error From User Token ${console.error()}`});
+        res.json({ message: `Internal Server Error From Admin Token ${console.error()}`});
     }
 }

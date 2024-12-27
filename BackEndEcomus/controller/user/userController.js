@@ -1,23 +1,23 @@
-const AuthServices = require('../services/authServices');
+const AuthServices = require('../../services/authServices');
 const authServices = new AuthServices();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 exports.registerUser = async (req, res) => {
     try {
-        let admin = await authServices.getUser({ email: req.body.email });
+        let user = await authServices.getUser({ email: req.body.email });
         // console.log(admin);
-        if (admin) {
-            return res.status(400).json({ message: `Admin is Already Registerd...` });
+        if (user) {
+            return res.status(400).json({ message: `User is Already Registerd...` });
         }
         let hashPassword = await bcrypt.hash(req.body.password, 10);
         // console.log(hashPassword);
-        admin = await authServices.addNewUser({
+        user = await authServices.addNewUser({
             ...req.body,
             password: hashPassword,
 
         });
-        res.status(201).json({ admin: admin, message: `New Admin Is Added SuccesFully...` });
+        res.status(201).json({ user: user, message: `New User Is Added SuccesFully...` });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: `Internal Server Error..${console.error()}` });
@@ -53,13 +53,15 @@ exports.loginUser = async (req, res) => {
 // Get All User
 exports.getAllUser = async(req, res) => {
     try {
-        let users = await authServices.getAllUsers({ isDelete: false});
-        console.log(users);
-        if(!users){
+        const users = await authServices.getAllUsers({ isAdmin: false});
+        console.log('users is --> ',users);
+        if (!users ) {
             return res.status(404).json({ message: `Users Data Not Found Please Try Again..!`});
         }
         res.status(200).json(users);
-    } catch (error) {
+        console.log('users is --> ',users);
+    } catch (error) 
+    {
         console.log(error);
         res.status(500).json({ message: `Internal Server Error...${console.error()}`})        
     }
@@ -67,11 +69,11 @@ exports.getAllUser = async(req, res) => {
 exports.getUser = async (req, res) => {
     try {
         const id = req.params.id;
-        const userExit = await authServices.getUserById(id);
-        if(!userExit){
+        const user = await authServices.getUserById(id);
+        if(!user){
           return res.status(404).json({msg: "User Not Found"});
         }
-        res.status(200).json(userExit)
+        res.status(200).json(user)
       } catch (error) {
         res.status(500).json({error: error.message});
       }
@@ -79,7 +81,7 @@ exports.getUser = async (req, res) => {
   
   exports.updateUser = async (req, res) => {
     try {
-      const userId = req.params.id; // Use params instead of query
+      const userId = req.params.id; 
       const user = await authServices.getUserById(userId);
       if (!user) {
         return res.status(404).json({ message: "User Not Found. Please Try Again." });
@@ -99,7 +101,7 @@ exports.deleteUser = async(req, res) => {
         if(!user){
             return res.status(404).json({message: `User Not Found...Please Try Again`})
         }
-        user = await userService.updateUser(user._id, {isDelete: true});
+        user = await authServices.updateUser(user._id, {isDelete: true});
         res.status(200).json({mmessage: `User Deleted SuccesFully.....`})
     } catch (error) {
         console.log(error);

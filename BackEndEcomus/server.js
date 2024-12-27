@@ -8,9 +8,19 @@ const cors = require('cors')
 app.use(express.json());
 app.use(cors());
 
+
+/* Admin Routes */
+const adminRoutes = require('./routes/admin/AdminRoutes');
+const productRoutes = require('./routes/admin/ProductRoutes')
+
+app.use('/api/admin',adminRoutes)
+app.use('/api/admin',productRoutes)
+
 /* user Routes */
-const userRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/user/userRoutes');
 app.use('/api/user',userRoutes)
+
+
 
 app.listen(port, () => {
   mongoose

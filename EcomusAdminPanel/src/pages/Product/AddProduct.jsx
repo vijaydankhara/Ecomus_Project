@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import './AddProduct.css';
 
 function AddProduct() {
@@ -14,10 +15,8 @@ function AddProduct() {
     colors: [],
   });
 
-
   const availableSizes = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
   const availableColors = ['Black', 'White', 'Orange', 'Yellow', 'Red'];
-
 
   const calculateSlashPrice = () => {
     const { price, discount } = formData;
@@ -27,10 +26,8 @@ function AddProduct() {
     return '';
   };
 
-
   const handleChange = (e) => {
     const { name, value, checked } = e.target;
-
 
     if (name === 'sizes' || name === 'colors') {
       const updatedValues = checked
@@ -43,7 +40,6 @@ function AddProduct() {
         [name]: e.target.files ? e.target.files : value,
       };
 
-
       if (name === 'price' || name === 'discount') {
         updatedData.slashprice = calculateSlashPrice();
       }
@@ -52,11 +48,41 @@ function AddProduct() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-  };
 
+    // Prepare FormData for file and data submission
+    const formDataToSend = new FormData();
+
+    // Append each field in the formData state to the FormData object
+    Object.entries(formData).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => formDataToSend.append(key, item));
+      } else if (key === 'images') {
+        Array.from(value).forEach((file) => formDataToSend.append('images', file));
+      } else {
+        formDataToSend.append(key, value);
+      }
+    });
+
+    try {
+      const response = await axios.post(
+        'http://localhost:1122/api/admin/addproduct',
+        formDataToSend,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      console.log('Product added successfully:', response.data);
+      alert('Product added successfully!');
+    } catch (error) {
+      console.error('Error adding product:', error.response || error.message);
+      alert('Failed to add product. Please try again.');
+    }
+  };
 
   const CheckboxGroup = ({ name, options, selectedValues }) => (
     <div className="form-group">
@@ -115,7 +141,7 @@ function AddProduct() {
             required
           />
         </div>
-        <div className='flex flex-row justify-between'>
+        <div className="flex flex-row justify-between">
           <div className="form-group">
             <label htmlFor="price">Price</label>
             <input
@@ -139,44 +165,41 @@ function AddProduct() {
             />
           </div>
         </div>
-        <div className='flex flex-row justify-evenly'>
-        <div className="form-group">
-          <label htmlFor="slashprice">Slash Price</label>
-          <input
-            type="number"
-            id="slashprice"
-            name="slashprice"
-            value={formData.slashprice}
-            onChange={handleChange}
-            readOnly
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="images">Images</label>
-          <input
-            type="file" multiple
-            id="images"
-            name="images"
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <div className="flex flex-row justify-evenly">
+          <div className="form-group">
+            <label htmlFor="slashprice">Slash Price</label>
+            <input
+              type="number"
+              id="slashprice"
+              name="slashprice"
+              value={formData.slashprice}
+              onChange={handleChange}
+              readOnly
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="images">Images</label>
+            <input
+              type="file"
+              multiple
+              id="images"
+              name="images"
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
 
-        {/* Render Sizes Checkbox Group */}
         <CheckboxGroup
           name="sizes"
           options={availableSizes}
           selectedValues={formData.sizes}
         />
-        
-        {/* Render Colors Checkbox Group */}
         <CheckboxGroup
           name="colors"
           options={availableColors}
           selectedValues={formData.colors}
         />
-
         <button type="submit" className="submit-button">Add Product</button>
       </form>
     </div>

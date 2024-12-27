@@ -22,7 +22,7 @@ const AuthForm = () => {
   const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("userToken");
     const email = localStorage.getItem("userEmail");
 
     if (token && email) {
@@ -92,7 +92,7 @@ const AuthForm = () => {
 
     try {
       if (isRegister) {
-        await axios.post("http://localhost:1122/api/user/registerAuth", formData);
+        await axios.post("http://localhost:1122/api/user/registeruser", formData);
         toast.success("User registered successfully!");
         toggleForm();
       } else {
@@ -102,7 +102,7 @@ const AuthForm = () => {
         });
 
         const token = response.data.token;
-        localStorage.setItem("authToken", token);
+        localStorage.setItem("userToken", token);
         localStorage.setItem("userEmail", formData.email);
         setIsLogin(true);
         setUserEmail(formData.email);
@@ -117,7 +117,7 @@ const AuthForm = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
+    localStorage.removeItem("userToken");
     localStorage.removeItem("userEmail");
     setIsLogin(false);
     setUserEmail("");
@@ -125,10 +125,10 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto my-10 p-6 border border-gray-300 rounded-lg shadow-lg bg-[#47356a] relative">
+    <div className="max-w-md mx-auto my-10 p-6 border border-gray-300 rounded-lg shadow-lg bg-[#c7abfe] relative">
       <Toaster />
       {isLogin && (
-        <div className="absolute top-0 right-0 p-4 text-[#fff] font-bold">
+        <div className="absolute top-12  right-0 p-4 text-[#3f1c1c] font-bold">
           {userEmail}
         </div>
       )}
