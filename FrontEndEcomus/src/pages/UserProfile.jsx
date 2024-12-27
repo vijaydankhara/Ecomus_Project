@@ -3,8 +3,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 function UserProfile() {
+
   const navigate = useNavigate();
-  const { id } = useParams();
+  const {_id} = useParams();
+  const API = `http://localhost:1122/api/user/getuser/${_id}`
+
+  console.log(API);
+  
 
   const initialUser = {
     firstName: "",
@@ -13,6 +18,9 @@ function UserProfile() {
     dateOfBirth: "",
     address: "",
   };
+
+  console.log("initialUser" , initialUser);
+  
 
   const [user, setUser] = useState(initialUser);
   const [error, setError] = useState(null);
@@ -23,21 +31,17 @@ function UserProfile() {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("authToken");
-
         if (!token) {
           throw new Error("Unauthorized: Token not found");
         }
-
         const config = {
           headers: {
-            Authorization: `Bearer ${token}`,
+            authorization: `Bearer ${token}`,
           },
         };
-
-        const response = await axios.get(
-          `http://localhost:1122/api/user/getuser/${id}`,
-          config
-        );
+        const response = await axios.get(API , config);
+        console.log(response.data);
+        
         setUser(response.data || initialUser);
       } catch (err) {
         console.error("Error fetching user data:", err);
@@ -46,11 +50,11 @@ function UserProfile() {
         setIsLoading(false);
       }
     };
-
     fetchUser();
-  }, [id]);
+  }, [_id]);
 
   const inputChange = (e) => {
+    e.preventDefault()
     const { name, value } = e.target;
     setUser((prevState) => ({ ...prevState, [name]: value }));
   };
@@ -59,14 +63,12 @@ function UserProfile() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("authToken");
-
       if (!token) {
         throw new Error("Unauthorized: Token not found");
       }
-
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          authorization: `Bearer ${token}`,
         },
       };
 
@@ -103,6 +105,7 @@ function UserProfile() {
             First Name
           </label>
           <input
+            id="firstName"
             type="text"
             name="firstName"
             value={user.firstName}
@@ -116,6 +119,7 @@ function UserProfile() {
             Last Name
           </label>
           <input
+            id="lastName"
             type="text"
             name="lastName"
             value={user.lastName}
@@ -129,6 +133,7 @@ function UserProfile() {
             Mobile Number
           </label>
           <input
+            id="mobileNo"
             type="text"
             name="mobileNo"
             value={user.mobileNo}
@@ -142,6 +147,7 @@ function UserProfile() {
             Date of Birth
           </label>
           <input
+            id="dateOfBirth"
             type="date"
             name="dateOfBirth"
             value={user.dateOfBirth}
@@ -155,11 +161,13 @@ function UserProfile() {
             Address
           </label>
           <textarea
+            id="address"
             name="address"
             value={user.address}
             onChange={inputChange}
             className="w-full px-3 py-2 border rounded"
             required
+            autoComplete="true"
           ></textarea>
         </div>
         <div className="mt-6">
