@@ -1,66 +1,54 @@
-const { query } = require('express');
 const Product = require('../models/productModel');
 
-module.exports = class ProductServies {
-
+module.exports = class ProductServices {
     // Add New Product
     async addNewProduct(body) {
         try {
             return await Product.create(body);
         } catch (error) {
-            console.log(error);
-            return error.message;
+            console.error("Error in addNewProduct Service:", error);
+
         }
-    };
+    }
 
     // Get Single Product
-    async getProduct(body) {
+    async getProduct(filter) {
         try {
-            return await Product.findOne(body);
+            return await Product.findOne(filter);
         } catch (error) {
-            console.log(error);
-            return error.message;
+            console.error("Error in getProduct Service:", error);
+
         }
-    };
+    }
 
     // Get Single Product By Id
     async getProductById(id) {
         try {
             return await Product.findById(id);
         } catch (error) {
-            console.log(error);
-            return error.message;
+            console.error("Error in getProductById Service:", error);
+
         }
-    };
+    }
 
     // Update Product
     async updateProduct(id, body) {
         try {
             return await Product.findByIdAndUpdate(id, { $set: body }, { new: true });
         } catch (error) {
-            console.log(error);
-            return error.message;
-        }
-    };
+            console.error("Error in updateProduct Service:", error);
 
-    // Update Product
+        }
+    }
+
+    // Get All Products
     async getAllProducts(query) {
         try {
-            let categoryWise = query.category && query.category !== "" ? [
-                { $match: { category: query.category } }
-            ] : [];
-            let find = [
-                { $match: { isDelete: false } },
-                ...categoryWise
-            ];
-
-            let result = await Product.aggregate(find);
-            return result;
+            const categoryFilter = query.category ? { category: query.category } : {};
+            return await Product.find({ isDelete: false, ...categoryFilter });
         } catch (error) {
-            console.log(error);
-            return error.message;
+            console.error("Error in getAllProducts Service:", error);
+
         }
-
-    };
-
-}
+    }
+};

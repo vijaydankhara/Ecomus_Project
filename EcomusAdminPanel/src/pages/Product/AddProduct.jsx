@@ -1,35 +1,39 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './AddProduct.css';
+import React, { useState } from "react";
+import axios from "axios";
+import "./AddProduct.css";
+import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 function AddProduct() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    category: '',
-    price: '',
-    slashprice: '',
-    discount: '',
+    title: "",
+    description: "",
+    category: "",
+    price: "",
+    slashprice: "",
+    discount: "",
     images: [],
     sizes: [],
     colors: [],
   });
 
-  const availableSizes = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
-  const availableColors = ['Black', 'White', 'Orange', 'Yellow', 'Red'];
+  const availableSizes = ["S", "M", "L", "XL", "2XL", "3XL"];
+  const availableColors = ["Black", "White", "Orange", "Yellow", "Red"];
 
   const calculateSlashPrice = () => {
     const { price, discount } = formData;
     if (price && discount) {
-      return price - (price * discount / 100);
+      const calculatedSlashPrice = price - price * (discount / 10);
+      return calculatedSlashPrice.toFixed(2);
     }
-    return '';
+    return "";
   };
 
   const handleChange = (e) => {
     const { name, value, checked } = e.target;
 
-    if (name === 'sizes' || name === 'colors') {
+    if (name === "sizes" || name === "colors") {
       const updatedValues = checked
         ? [...formData[name], value]
         : formData[name].filter((item) => item !== value);
@@ -40,7 +44,7 @@ function AddProduct() {
         [name]: e.target.files ? e.target.files : value,
       };
 
-      if (name === 'price' || name === 'discount') {
+      if (name === "price" || name === "discount") {
         updatedData.slashprice = calculateSlashPrice();
       }
 
@@ -50,16 +54,14 @@ function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Prepare FormData for file and data submission
     const formDataToSend = new FormData();
-
-    // Append each field in the formData state to the FormData object
     Object.entries(formData).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         value.forEach((item) => formDataToSend.append(key, item));
-      } else if (key === 'images') {
-        Array.from(value).forEach((file) => formDataToSend.append('images', file));
+      } else if (key === "images") {
+        Array.from(value).forEach((file) =>
+          formDataToSend.append("images", file)
+        );
       } else {
         formDataToSend.append(key, value);
       }
@@ -67,20 +69,23 @@ function AddProduct() {
 
     try {
       const response = await axios.post(
-        'http://localhost:1122/api/admin/addproduct',
+        "http://localhost:1122/api/admin/addproduct",
         formDataToSend,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
-      console.log('Product added successfully:', response.data);
-      alert('Product added successfully!');
+      console.log("Product added successfully:", response.data);
+      toast.success("Product added successfully!");
+      setTimeout(() => {
+        navigate("/producttabal");
+      },1000);
     } catch (error) {
-      console.error('Error adding product:', error.response || error.message);
-      alert('Failed to add product. Please try again.');
+      console.error("Error adding product:", error.response || error.message);
+      toast.error("Failed to add product. Please try again.");
     }
   };
 
@@ -200,7 +205,9 @@ function AddProduct() {
           options={availableColors}
           selectedValues={formData.colors}
         />
-        <button type="submit" className="submit-button">Add Product</button>
+        <button type="submit" className="submit-button">
+          Add Product
+        </button>
       </form>
     </div>
   );

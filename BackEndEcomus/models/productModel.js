@@ -30,17 +30,17 @@ const productSchema = mongoose.Schema({
         min: 0,
         max: 100,
     },
-    images: [{
+    images:[{
         type: String,
+        required: true,
     }],
     sizes: [{
         type: String,
-        trim: true,
         required: true,
     }],
     colors: [{
         type: String,
-        trim: true,
+        required: true,
     }],
     isDelete: {
         type: Boolean,
