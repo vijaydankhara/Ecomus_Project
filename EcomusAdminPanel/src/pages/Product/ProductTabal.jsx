@@ -22,18 +22,58 @@ const ProductTable = () => {
     fetchProducts();
   }, []);
 
-  const handleEdit = (productName) => {
-    console.log(`Edit product: ${productName}`);
+  const handleEdit = async (productId) => {
+    const updatedData = {
+      title: "",
+      description: "",
+      category: "",
+      price: "",
+      slashprice: "",
+      discount: "",
+      images: [],
+      sizes: [],
+      colors: [],
+    };
+
+    try {
+      const response = await axios.put(
+        `http://localhost:1122/api/admin/updateProduct?productId=${productId}`,
+        updatedData
+      );
+      console.log("Product updated successfully:", response.data);
+
+      const updatedProducts = await axios.get(
+        "http://localhost:1122/api/admin/getAllProduct"
+      );
+      setProducts(updatedProducts.data);
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
   };
 
-  const handleDelete = (productName) => {
-    console.log(`Delete product: ${productName}`);
+  const handleDelete = async (productId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:1122/api/admin/deleteProduct?productId=${productId}`
+      );
+      console.log("Product deleted successfully:", response.data);
+
+      const updatedProducts = await axios.get(
+        "http://localhost:1122/api/admin/getAllProduct"
+      );
+      setProducts(updatedProducts.data);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
 
   // Pagination logic
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   const totalPages = Math.ceil(products.length / productsPerPage);
 
@@ -69,7 +109,6 @@ const ProductTable = () => {
                       src={
                         product.images?.[0] || "https://via.placeholder.com/100"
                       }
-                      
                       className="product-image "
                     />
                   </td>
@@ -80,13 +119,13 @@ const ProductTable = () => {
                   <td>
                     <button
                       className="action-button edit"
-                      onClick={() => handleEdit(product.title)}
+                      onClick={() => handleEdit(product._id)}
                     >
                       Edit
                     </button>
                     <button
                       className="action-button delete"
-                      onClick={() => handleDelete(product.title)}
+                      onClick={() => handleDelete(product._id)} 
                     >
                       Delete
                     </button>
