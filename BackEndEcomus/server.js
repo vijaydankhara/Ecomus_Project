@@ -8,7 +8,7 @@ const path = require('path')
 
 app.use(express.json());
 app.use(cors());
-app.use("/public/images", express.static(path.join(__dirname, 'public', 'images')));
+app.use("/images", express.static(path.join(__dirname, 'public', 'images')));
 // app.use("/images", express.static(path.join(__dirname, 'public', 'images')));
 
 
@@ -17,7 +17,7 @@ const adminRoutes = require('./routes/admin/AdminRoutes');
 const productRoutes = require('./routes/admin/ProductRoutes')
 
 app.use('/api/admin',adminRoutes)
-app.use('/api/admin',productRoutes)
+app.use('/api/admin/product',productRoutes)
 
 /* user Routes */
 const userRoutes = require('./routes/user/userRoutes');

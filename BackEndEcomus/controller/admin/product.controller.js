@@ -12,7 +12,7 @@ exports.addNewProduct = async (req, res) => {
         return res.status(400).json({ message: 'No files uploaded!' });
       }
     //   const imagePath = req.files.map(file => file.path.replace(/\\/g, "/"));
-    const imagePath = req.files.map(file => `/images/${file.filename}`);
+    const imagePath = req.files.map(file => `/public/images/${file.filename}`);
 
       const newProduct = await productServices.addNewProduct({
         ...req.body,

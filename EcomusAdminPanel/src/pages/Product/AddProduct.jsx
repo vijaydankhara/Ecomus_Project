@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./AddProduct.css";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function AddProduct() {
@@ -12,7 +12,6 @@ function AddProduct() {
     category: "",
     price: "",
     slashprice: "",
-    discount: "",
     images: [],
     sizes: [],
     colors: [],
@@ -21,34 +20,21 @@ function AddProduct() {
   const availableSizes = ["S", "M", "L", "XL", "2XL", "3XL"];
   const availableColors = ["Black", "White", "Orange", "Yellow", "Red"];
 
-  const calculateSlashPrice = () => {
-    const { price, discount } = formData;
-    if (price && discount) {
-      const calculatedSlashPrice = price - price * (discount / 10);
-      return calculatedSlashPrice.toFixed(2);
-    }
-    return "";
-  };
-
   const handleChange = (e) => {
-    const { name, value, checked } = e.target;
+    const { name, value, files, checked } = e.target;
 
     if (name === "sizes" || name === "colors") {
-      const updatedValues = checked
-        ? [...formData[name], value]
-        : formData[name].filter((item) => item !== value);
-      setFormData({ ...formData, [name]: updatedValues });
-    } else {
-      const updatedData = {
+      setFormData({
         ...formData,
-        [name]: e.target.files ? e.target.files : value,
-      };
-
-      if (name === "price" || name === "discount") {
-        updatedData.slashprice = calculateSlashPrice();
-      }
-
-      setFormData(updatedData);
+        [name]: checked
+          ? [...formData[name], value] 
+          : formData[name].filter((item) => item !== value),
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: files ? files : value,
+      });
     }
   };
 
@@ -56,12 +42,12 @@ function AddProduct() {
     e.preventDefault();
     const formDataToSend = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((item) => formDataToSend.append(key, item));
-      } else if (key === "images") {
+      if (key === "images") {
         Array.from(value).forEach((file) =>
           formDataToSend.append("images", file)
         );
+      } else if (Array.isArray(value)) {
+        value.forEach((item) => formDataToSend.append(key, item));
       } else {
         formDataToSend.append(key, value);
       }
@@ -69,7 +55,7 @@ function AddProduct() {
 
     try {
       const response = await axios.post(
-        "http://localhost:1122/api/admin/addproduct",
+        "http://localhost:1122/api/admin/product/addproduct",
         formDataToSend,
         {
           headers: {
@@ -82,32 +68,12 @@ function AddProduct() {
       toast.success("Product added successfully!");
       setTimeout(() => {
         navigate("/producttabal");
-      },1000);
+      }, 1000);
     } catch (error) {
       console.error("Error adding product:", error.response || error.message);
       toast.error("Failed to add product. Please try again.");
     }
   };
-
-  const CheckboxGroup = ({ name, options, selectedValues }) => (
-    <div className="form-group">
-      <label>{name.charAt(0).toUpperCase() + name.slice(1)}</label>
-      <div className="checkbox-group">
-        {options.map((option) => (
-          <label key={option}>
-            <input
-              type="checkbox"
-              name={name}
-              value={option}
-              checked={selectedValues.includes(option)}
-              onChange={handleChange}
-            />
-            {option}
-          </label>
-        ))}
-      </div>
-    </div>
-  );
 
   return (
     <div className="add-product-container">
@@ -159,19 +125,6 @@ function AddProduct() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="discount">Discount</label>
-            <input
-              type="number"
-              id="discount"
-              name="discount"
-              value={formData.discount}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-        <div className="flex flex-row justify-evenly">
-          <div className="form-group">
             <label htmlFor="slashprice">Slash Price</label>
             <input
               type="number"
@@ -179,32 +132,55 @@ function AddProduct() {
               name="slashprice"
               value={formData.slashprice}
               onChange={handleChange}
-              readOnly
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="images">Images</label>
-            <input
-              type="file"
-              multiple
-              id="images"
-              name="images"
-              onChange={handleChange}
               required
             />
           </div>
         </div>
-
-        <CheckboxGroup
-          name="sizes"
-          options={availableSizes}
-          selectedValues={formData.sizes}
-        />
-        <CheckboxGroup
-          name="colors"
-          options={availableColors}
-          selectedValues={formData.colors}
-        />
+        <div className="form-group">
+          <label htmlFor="images">Images</label>
+          <input
+            type="file"
+            multiple
+            id="images"
+            name="images"
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Sizes</label>
+          <div className="checkbox-group">
+            {availableSizes.map((size) => (
+              <label key={size}>
+                <input
+                  type="checkbox"
+                  name="sizes"
+                  value={size}
+                  checked={formData.sizes.includes(size)}
+                  onChange={handleChange}
+                />
+                {size}
+              </label>
+            ))}
+          </div>
+        </div>
+        <div className="form-group">
+          <label>Colors</label>
+          <div className="checkbox-group">
+            {availableColors.map((color) => (
+              <label key={color}>
+                <input
+                  type="checkbox"
+                  name="colors"
+                  value={color}
+                  checked={formData.colors.includes(color)}
+                  onChange={handleChange}
+                />
+                {color}
+              </label>
+            ))}
+          </div>
+        </div>
         <button type="submit" className="submit-button">
           Add Product
         </button>

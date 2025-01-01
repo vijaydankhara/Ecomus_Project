@@ -6,12 +6,10 @@ const jwt = require('jsonwebtoken');
 exports.registerUser = async (req, res) => {
     try {
         let user = await authServices.getUser({ email: req.body.email });
-        // console.log(admin);
         if (user) {
             return res.status(400).json({ message: `User is Already Registerd...` });
         }
         let hashPassword = await bcrypt.hash(req.body.password, 10);
-        // console.log(hashPassword);
         user = await authServices.addNewUser({
             ...req.body,
             password: hashPassword,
@@ -24,13 +22,10 @@ exports.registerUser = async (req, res) => {
     }
 };
 
-
 // Login User
-
 exports.loginUser = async (req, res) => {
     try {
         let user = await authServices.getUser({ email: req.body.email, isAdmin: false });
-        console.log("user is -->", user);
         if (!user) {
             return res.status(400).json({ message: 'Email IS Not Found' });
         }
@@ -41,8 +36,6 @@ exports.loginUser = async (req, res) => {
         let token = jwt.sign({ userId: user._id }, 'User');
         console.log('token is ', token);
         res.status(200).json({ token, message: 'Login Successfully' });
-
-
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: `Internal Server Error...${console.error()}` })
@@ -54,7 +47,6 @@ exports.loginUser = async (req, res) => {
 exports.getAllUser = async(req, res) => {
     try {
         const users = await authServices.getAllUsers({ isAdmin: false});
-        console.log('users is --> ',users);
         if (!users ) {
             return res.status(404).json({ message: `Users Data Not Found Please Try Again..!`});
         }
