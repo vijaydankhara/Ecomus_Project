@@ -9,6 +9,8 @@ import Navbar from '../components/Navbar'
 import AboutUs from '../pages/AboutUs'
 import AuthForm from '../pages/AuthForm'
 import UserProfile from '../pages/UserProfile'
+import Wishlist from '../pages/Wishlist'
+import AddToCart from '../pages/AddToCart'
 
 import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom'
 
@@ -55,6 +57,14 @@ const navList = createBrowserRouter([
             {
                 path: '/userprofile',
                 element: <UserProfile/>
+            },
+            {
+                path: '/wishlist',
+                element: <Wishlist/>
+            },
+            {
+                path: '/addtocart',
+                element: <AddToCart/>
             },
         ]
     }

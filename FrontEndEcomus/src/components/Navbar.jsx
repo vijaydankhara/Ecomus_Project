@@ -7,6 +7,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { RiMenu2Fill } from "react-icons/ri";
 import { IoMdLogIn } from "react-icons/io";
+import { FaCartPlus } from "react-icons/fa6";
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import {
     Sheet,
@@ -38,10 +39,7 @@ const Navbar = () => {
                                         <li> <NavLink to='/'>Home</NavLink></li>
                                         <li> <NavLink to='/shop'>Shop</NavLink></li>
                                         <li> <NavLink to='/product'>Products</NavLink></li>
-                                     
                                         <li className=''> <NavLink to='/about'>About</NavLink></li>
-
-                                        {/* </li> */}
                                         <li> <NavLink to='blog'>Blog</NavLink></li>
                                         <li> <NavLink to='buynow'>Buy now</NavLink></li>
                                      </ul>
@@ -65,22 +63,19 @@ const Navbar = () => {
                         <li> <NavLink to='/'>Home</NavLink></li>
                         <li> <NavLink to='/shop'>Shop</NavLink></li>
                         <li> <NavLink to='/product'>Products</NavLink></li>
-                        {/* <li onClick={page_details()}> <NavLink to='/page' className='flex place-items-center gap-1' >Pages <IoIosArrowDown className='relative top-0.5' /></NavLink></li> */}
                         <li className=''> <NavLink to='/about'>About</NavLink></li>
-
-                        {/* </li> */}
                         <li> <NavLink to='blog'>Blog</NavLink></li>
                         <li> <NavLink to='buynow'>Buy now</NavLink></li>
                     </ul>
 
                     {/* icon */}
                     <div className='flex gap-1 md:gap-3 mr-10 md:mr-12 lg:mr-14 xl:mr-16 text-lg *:*:duration-300 '>
-                        <Link><IoSearch className='hover:text-red-600' /></Link>
-                        <NavLink to={'/authform'} ><IoMdLogIn className=' max-md:hidden hover:text-red-600' /></NavLink>
-                        <NavLink to={'/userprofile'} ><FiUser className=' max-md:hidden hover:text-red-600' /></NavLink>
+                        <Link><IoSearch className='max-md:hidden hover:text-red-600' /></Link>
+                        <NavLink to={'/authform'} ><IoMdLogIn className='  hover:text-red-600' /></NavLink>
+                        <NavLink to={'/userprofile'} ><FiUser className='  hover:text-red-600' /></NavLink>
                       
-                        <Link><FaRegHeart className=' max-md:hidden hover:text-red-600' /></Link>
-                        <Link><RiShoppingBag2Line className='hover:text-red-600' /></Link>
+                        <NavLink to={'/wishlist'}><FaRegHeart className='  hover:text-red-600' /></NavLink>
+                        <NavLink to={'/addtocart'}><FaCartPlus  className='hover:text-red-600' /></NavLink>
                     </div>
                 </nav>
             </header>

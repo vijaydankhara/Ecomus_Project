@@ -3,6 +3,7 @@ import axios from "axios";
 import { BiDollar } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa";
 import { RiShoppingBag2Line } from "react-icons/ri";
+import Footers from "../components/Footer";
 
 const Buynow = () => {
   const [products, setProducts] = useState([]);
@@ -47,7 +48,8 @@ const Buynow = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+   <div>
+     <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {products.map((product) => {
         const selectedColor =
           selectedColors[product._id] ||
@@ -59,40 +61,47 @@ const Buynow = () => {
         return (
           <div
             key={product._id}
-            className="h-auto w-64 border border-gray-300 rounded-md shadow-md p-4"
+            className="h-[450px] w-72 border border-gray-200 rounded-md shadow-sm p-4 hover:shadow-md transition-all duration-200"
           >
-            {/* Image */}
-            <div className="h-24 w-full rounded-md overflow-hidden mb-3">
+            {/* Product Image */}
+            <div className="h-44 w-full rounded-md overflow-hidden relative">
               <img
                 src={product.images[0] || "https://via.placeholder.com/150"}
                 alt={product.title}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
               />
             </div>
 
             {/* Product Info */}
-            <div className="flex flex-col gap-2 text-left">
-              <p className="text-sm font-bold hover:text-red-500">
+            <div className="flex flex-col gap-3 mt-4">
+              {/* Title */}
+              <p className="text-lg font-semibold text-center hover:text-red-500">
                 {product.title}
               </p>
-              <div className="flex items-center text-gray-600 text-sm">
-                <BiDollar className="" />
-                <span>{product.price}</span>
-                <BiDollar className="mr-1 font-bold text-green-900" />
+
+              {/* Pricing */}
+              <div className="flex justify-center items-center gap-2">
+                <span className="flex items-center text-blue-600 text-lg font-bold">
+                  <BiDollar />
+                  {product.price}
+                </span>
                 {product.slashprice && (
-                  <span className="ml-2 line-through text-xs font-bold text-green-900">
+                  <span className="flex items-center text-green-500 text-lg line-through">
+                    <BiDollar />
                     {product.slashprice}
                   </span>
                 )}
               </div>
 
               {/* Color Selection */}
-              <div className="flex gap-2 mt-2">
+              <div className="flex justify-center gap-2 mt-2">
                 {product.colors?.map((color, index) => (
                   <button
                     key={index}
-                    className={`h-5 w-5 rounded-full border  ${
-                      selectedColor === color ? "border-black" : ""
+                    className={`h-6 w-6 rounded-full border ${
+                      selectedColor === color
+                        ? "ring ring-[#ff0000] ring-offset-1"
+                        : "border-gray-300"
                     }`}
                     style={{ backgroundColor: color }}
                     onClick={() => handleColorChange(product._id, color)}
@@ -101,12 +110,14 @@ const Buynow = () => {
               </div>
 
               {/* Size Selection */}
-              <div className="flex gap-2 mt-2 text-xs text-gray-600">
+              <div className="flex justify-center gap-2 mt-3">
                 {product.sizes?.map((size, index) => (
                   <button
                     key={index}
-                    className={`px-2 py-1 border rounded ${
-                      selectedSize === size ? "bg-black text-white" : "bg-white"
+                    className={`px-3 py-1 rounded border text-gray-700 text-sm ${
+                      selectedSize === size
+                        ? "bg-black text-white border-black"
+                        : "border-gray-300"
                     }`}
                     onClick={() => handleSizeChange(product._id, size)}
                   >
@@ -116,16 +127,16 @@ const Buynow = () => {
               </div>
 
               {/* Actions */}
-              <div className="flex gap-4 mt-3">
+              <div className="flex justify-center gap-4 mt-4">
                 <button
-                  className="flex items-center gap-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
+                  className="flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 text-sm"
                   onClick={() => handleAddToWishlist(product._id)}
                 >
                   <FaRegHeart />
                   Wishlist
                 </button>
                 <button
-                  className="flex items-center gap-2 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+                  className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"
                   onClick={() =>
                     handleAddToCart(product._id, selectedColor, selectedSize)
                   }
@@ -139,6 +150,8 @@ const Buynow = () => {
         );
       })}
     </div>
+    <Footers/>
+   </div>
   );
 };
 
