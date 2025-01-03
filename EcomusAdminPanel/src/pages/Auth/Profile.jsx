@@ -1,175 +1,148 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function Profile() {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const API = `http://localhost:1122/api/admin/getadmin/${id}`;
-
-  const initialUser = {
+function AdminProfile() {
+  const [admin, setAdmin] = useState({
     firstName: "",
     lastName: "",
-    mobileNo: "",
+    gender: "",
     dateOfBirth: "",
     address: "",
-  };
+  });
 
-  const [admin, setAdmin] = useState(initialUser);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [token, setToken] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Fetch admin details
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchAdmin = async () => {
+      if (!token) return;
+      setIsLoading(true);
       try {
-        const token = localStorage.getItem("adminToken");
-        if (!token) {
-          throw new Error("Unauthorized: Token not found");
-        }
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get(API, config);
-        setAdmin(response.data || initialUser);
-      } catch (err) {
-        console.error("Error fetching user data:", err);
-        setError("Failed to fetch user data. Please try again.");
+        const response = await axios.get(
+          "http://localhost:1122/api/admin/getadmin",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setAdmin(response.data);
+        toast.success("Admin details fetched successfully!");
+      } catch (error) {
+        console.error("Error fetching admin details:", error);
+        toast.error("Failed to fetch admin details.");
       } finally {
         setIsLoading(false);
       }
     };
-    fetchUser();
-  }, [API]);
 
-  const inputChange = (e) => {
+    fetchAdmin();
+  }, [token]);
+
+  const handleProfileChange = (e) => {
     const { name, value } = e.target;
-    setAdmin((prevState) => ({ ...prevState, [name]: value }));
+    setAdmin({ ...admin, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  // Update admin profile
+  const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("userToken");
-      if (!token) {
-        throw new Error("Unauthorized: Token not found");
-      }
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
       const response = await axios.put(
-        `http://localhost:1122/api/admin/updateadmin/${id}`,
+        "http://localhost:1122/api/admin/updateadmin",
         admin,
-        config
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
-
-      alert(response.data.message || "User updated successfully");
-      navigate("/");
-    } catch (err) {
-      console.error("Error updating user:", err);
-      setError("Failed to update user data. Please try again.");
+      toast.success(response.data.message || "Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile.");
     }
   };
 
   if (isLoading) {
-    return <div className="text-center my-10">Loading...</div>;
+    return <div>Loading admin details...</div>;
   }
 
   return (
-    <div className="max-w-md mx-auto my-10 p-6 border border-blue-800 bg-orange-200 rounded-lg shadow-lg">
-      <Link to="/" className="text-green-800 font-bold font-serif mb-5 block">
-        Back
-      </Link>
-      <h3 className="text-2xl font-bold mb-5 text-center">Admin Update</h3>
-
-      {error && <div className="mb-4 text-red-500">{error}</div>}
-
-      <form onSubmit={handleSubmit}>
+    <div className="max-w-xl mx-auto mt-10 p-6 border border-gray-300 rounded-lg bg-white shadow-md">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <form onSubmit={handleUpdate}>
+        <h1 className="text-center text-2xl font-bold text-blue-600 mb-6">
+          Admin Profile
+        </h1>
         <div className="mb-4">
-          <label htmlFor="firstName" className="block text-gray-700 mb-2">
-            First Name
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            First Name:
           </label>
           <input
-            id="firstName"
             type="text"
             name="firstName"
             value={admin.firstName}
-            onChange={inputChange}
-            className="w-full px-3 py-2 border rounded"
-            required
+            onChange={handleProfileChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="lastName" className="block text-gray-700 mb-2">
-            Last Name
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Last Name:
           </label>
           <input
-            id="lastName"
             type="text"
             name="lastName"
             value={admin.lastName}
-            onChange={inputChange}
-            className="w-full px-3 py-2 border rounded"
-            required
+            onChange={handleProfileChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="mobileNo" className="block text-gray-700 mb-2">
-            Mobile Number
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Gender:
           </label>
           <input
-            id="mobileNo"
             type="text"
-            name="mobileNo"
-            value={admin.mobileNo}
-            onChange={inputChange}
-            className="w-full px-3 py-2 border rounded"
-            required
+            name="gender"
+            value={admin.gender}
+            onChange={handleProfileChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="dateOfBirth" className="block text-gray-700 mb-2">
-            Date of Birth
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Date of Birth:
           </label>
           <input
-            id="dateOfBirth"
             type="date"
             name="dateOfBirth"
             value={admin.dateOfBirth}
-            onChange={inputChange}
-            className="w-full px-3 py-2 border rounded"
-            required
+            onChange={handleProfileChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="address" className="block text-gray-700 mb-2">
-            Address
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Address:
           </label>
-          <textarea
-            id="address"
+          <input
+            type="text"
             name="address"
             value={admin.address}
-            onChange={inputChange}
-            className="w-full px-3 py-2 border rounded"
-            required
-            autoComplete="true"
-          ></textarea>
+            onChange={handleProfileChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
-        <div className="mt-6">
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-700"
-          >
-            Update Profile
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition"
+        >
+          Update Profile
+        </button>
       </form>
     </div>
   );
 }
 
-export default Profile;
+export default AdminProfile;
