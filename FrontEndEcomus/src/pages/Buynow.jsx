@@ -9,6 +9,7 @@ const Buynow = () => {
   const [products, setProducts] = useState([]);
   const [selectedColors, setSelectedColors] = useState({});
   const [selectedSizes, setSelectedSizes] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -31,7 +32,29 @@ const Buynow = () => {
       selectedColor,
       selectedSize,
     });
-    // Add your "Add to Cart" functionality here.
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("authToken");
+      const headers = { Authorization: `Bearer ${token}` };
+
+      const response = await axios.post("http://localhost:1122/api/admin/product/getAllProduct",{
+        productId: product._id,
+        quantity: 1,
+      },
+      {headers}
+    );
+    setMessage("Product added to cart successfully!");
+    console.log(response.data);
+
+    } catch (error) {
+      console.error(
+        "Error adding product to cart:",
+        error.response ? error.response.data : error.message
+      );
+      setMessage("Please try again!!!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleAddToWishlist = (productId) => {
