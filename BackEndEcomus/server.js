@@ -12,16 +12,14 @@ app.use("/images", express.static(path.join(__dirname, 'public', 'images')));
 // app.use("/images", express.static(path.join(__dirname, 'public', 'images')));
 
 
-/* Admin Routes */
-const adminRoutes = require('./routes/admin/AdminRoutes');
-const productRoutes = require('./routes/admin/ProductRoutes')
+// /*----------------------------|| Admin Route ||-----------------------------------*/
+const adminsroutes = require('./routes/admin/adminIndex');
+app.use('/api/admin',adminsroutes)
 
-app.use('/api/admin',adminRoutes)
-app.use('/api/admin/product',productRoutes)
 
-/* user Routes */
-const userRoutes = require('./routes/user/userRoutes');
-app.use('/api/user',userRoutes)
+// /*----------------------------|| Users Route ||-----------------------------------*/
+const usersroutes = require('./routes/user/userIndex');
+app.use('/api/user',usersroutes)
 
 
 

@@ -19,7 +19,7 @@ const Users = () => {
       }
 
       try {
-        const response = await axios.get("http://localhost:1122/api/user/getalluser", 
+        const response = await axios.get("http://localhost:1122/api/user/users/getalluser", 
           {
           headers: {
             authorization: `Bearer ${token}`,

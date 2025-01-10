@@ -12,7 +12,7 @@ exports.addToCart = async (req, res) => {
         if (cart) {
             return res.json({ message: "This Item Already In Your Cart" });
         }
-        cart = await cartService.addToCart({
+        cart = await cartServices.addToCart({
             user: req.user._id,
             ...req.body
         });

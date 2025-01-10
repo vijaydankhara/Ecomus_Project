@@ -92,14 +92,14 @@ const RegisterLogin = () => {
 
     try {
       if (isRegister) {
-        await axios.post("http://localhost:1122/api/admin/registeradmin",  {
+        await axios.post("http://localhost:1122/api/admin/admin-user/registeradmin",  {
           ...formData,
           isAdmin: true,
         });
         toast.success("Admin registered successfully!");
         toggleForm();
       } else {
-        const response = await axios.post("http://localhost:1122/api/admin/loginadmin", {
+        const response = await axios.post("http://localhost:1122/api/admin/admin-user/loginadmin", {
           email: formData.email,
           password: formData.password,
         });

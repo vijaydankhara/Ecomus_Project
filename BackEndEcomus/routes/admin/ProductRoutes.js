@@ -3,7 +3,7 @@ const productRoutes = express.Router();
 
 const {
     addNewProduct,getAllProducts,getProduct,updateProduct,deleteProduct
-} = require('../../controller/admin/product.controller');
+} = require('../../controller/admin/productController');
 
 
 const { upload } = require('../../middlewares/imageUpload')

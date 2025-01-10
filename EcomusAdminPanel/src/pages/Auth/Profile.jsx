@@ -22,7 +22,7 @@ function AdminProfile() {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          "http://localhost:1122/api/admin/getadmin",
+          "http://localhost:1122/api/admin/admin-user/getadmin",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -50,7 +50,7 @@ function AdminProfile() {
     e.preventDefault();
     try {
       const response = await axios.put(
-        "http://localhost:1122/api/admin/updateadmin",
+        "http://localhost:1122/api/admin/admin-user/updateadmin",
         admin,
         {
           headers: { Authorization: `Bearer ${token}` },
