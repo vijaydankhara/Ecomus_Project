@@ -6,9 +6,11 @@ exports.addToCart = async (req, res) => {
     try {
         let cart = await cartServices.getCart({
             user: req.user._id,
-            cartItem: req.body.cartItem,
+            productItem: req.body.productItem,
             isDelete: false
         });
+        // console.log("cart is -->",cart);
+        
         if (cart) {
             return res.json({ message: "This Item Already In Your Cart" });
         }

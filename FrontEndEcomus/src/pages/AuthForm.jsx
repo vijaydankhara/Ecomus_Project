@@ -92,11 +92,11 @@ const AuthForm = () => {
 
     try {
       if (isRegister) {
-        await axios.post("http://localhost:1122/api/user/registeruser", formData);
+        await axios.post("http://localhost:1122/api/user/users/registeruser", formData);
         toast.success("User registered successfully!");
         toggleForm();
       } else {
-        const response = await axios.post("http://localhost:1122/api/user/loginuser", {
+        const response = await axios.post("http://localhost:1122/api/user/users/loginuser", {
           email: formData.email,
           password: formData.password,
         });
