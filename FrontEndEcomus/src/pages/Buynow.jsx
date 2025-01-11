@@ -33,12 +33,11 @@ const Buynow = () => {
       toast.error("Please select a color and size before adding to cart.");
       return;
     }
-
-    // console.log("Add to Cart:", {
-    //   productId,
-    //   selectedColor,
-    //   selectedSize,
-    // });
+    console.log("Add to Cart Data To Body:", {
+      productId,
+      selectedColor,
+      selectedSize,
+    });
     setLoading(true);
 
     try {
@@ -51,7 +50,7 @@ const Buynow = () => {
           productId: productId,
           color: selectedColor,
           size: selectedSize,
-          quantity: 1,
+          quantity: 5,
         },
         {
           headers,
@@ -74,7 +73,7 @@ const Buynow = () => {
   const handleAddToWishlist = (productId) => {
     console.log("Add to Wishlist clicked for product ID:", productId);
     toast.success("Product added to wishlist!");
-    // Add your "Add to Wishlist" functionality here.
+    // "Add to Wishlist" .
   };
 
   const handleColorChange = (productId, color) => {
@@ -86,9 +85,9 @@ const Buynow = () => {
   };
 
   return (
-    <div>
+    <div className="bg-[#ffffff]">
       <ToastContainer position="top-right" autoClose={3000} /> {/* Toast container */}
-      <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="container mx-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 ">
         {products.map((product) => {
           const selectedColor =
             selectedColors[product._id] ||
@@ -100,14 +99,14 @@ const Buynow = () => {
           return (
             <div
               key={product._id}
-              className="h-[450px] w-72 border border-gray-200 rounded-md shadow-sm p-4 hover:shadow-md transition-all duration-200"
+              className="h-[450px] w-72 border border-blue-700 rounded-md shadow-sm p-4 hover:shadow-md transition-all duration-200"
             >
               {/* Product Image */}
-              <div className="h-44 w-full rounded-md overflow-hidden relative">
+              <div className="h-44 w-full rounded-md overflow-hidden relative ">
                 <img
-                  src={product.images[0] || "https://via.placeholder.com/150"}
+                  src="https://s.alicdn.com/@sc04/kf/Hc81fbd50244b4cee81fc27caa7206c83n.jpg_720x720q50.jpg"
                   alt={product.title}
-                  className="h-full w-full object-cover hover:scale-105 transition-transform duration-500"
+                  className="h-full w-full object-fill hover:scale-105 transition-transform duration-500"
                 />
               </div>
 

@@ -2,7 +2,7 @@ const Cart = require('../models/cartModel');
 
 module.exports = class  CartServices {
 
-// AddToCart
+// AddToCart Services
 async addToCart(body){
     try {
         return await Cart.create(body);

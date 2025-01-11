@@ -9,7 +9,7 @@ exports.addToCart = async (req, res) => {
             productItem: req.body.productItem,
             isDelete: false
         });
-        // console.log("cart is -->",cart);
+        console.log("cart is -->",cart);
         
         if (cart) {
             return res.json({ message: "This Item Already In Your Cart" });
