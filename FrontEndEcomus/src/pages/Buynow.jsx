@@ -50,7 +50,7 @@ const Buynow = () => {
           productId: productId,
           color: selectedColor,
           size: selectedSize,
-          quantity: 5,
+          // quantity: 5,
         },
         {
           headers,
@@ -136,11 +136,10 @@ const Buynow = () => {
                   {product.colors?.map((color, index) => (
                     <button
                       key={index}
-                      className={`h-6 w-6 rounded-full border ${
-                        selectedColor === color
-                          ? "ring ring-[#ff0000] ring-offset-1"
-                          : "border-gray-300"
-                      }`}
+                      className={`h-6 w-6 rounded-full border ${selectedColor === color
+                        ? "ring ring-[#ff0000] ring-offset-1"
+                        : "border-gray-300"
+                        }`}
                       style={{ backgroundColor: color }}
                       onClick={() => handleColorChange(product._id, color)}
                     ></button>
@@ -152,11 +151,10 @@ const Buynow = () => {
                   {product.sizes?.map((size, index) => (
                     <button
                       key={index}
-                      className={`px-3 py-1 rounded border text-gray-700 text-sm ${
-                        selectedSize === size
-                          ? "bg-black text-white border-black"
-                          : "border-gray-300"
-                      }`}
+                      className={`px-3 py-1 rounded border text-gray-700 text-sm ${selectedSize === size
+                        ? "bg-black text-white border-black"
+                        : "border-gray-300"
+                        }`}
                       onClick={() => handleSizeChange(product._id, size)}
                     >
                       {size}

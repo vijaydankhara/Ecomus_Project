@@ -1,31 +1,24 @@
-import React, { useState } from "react";
-import images1 from "../assets/asset_15.jpeg";
-import images2 from "../assets/asset_16.jpeg";
+import React, { useState, useEffect } from "react";
+import axios from "axios"; 
 import Footers from "../components/Footer";
 
 const AddToCart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Ribbed Tank Top",
-      price: 10,
-      quantity: 1,
-      image: images1,
-      color: "Orange",
-      size: "S",
-    },
-    {
-      id: 2,
-      name: "Regular Fit Oxford Shirt",
-      price: 20,
-      quantity: 1,
-      image: images2,
-      color: "Black",
-      size: "L",
-    },
-  ]);
-
+  const [cartItems, setCartItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await axios.get("http://localhost:1122/api/user/cart/getallcart");
+        setCartItems(response.data);
+      } catch (error) {
+        console.error("Error fetching cart items", error);
+      }
+    };
+
+    fetchCartItems();
+  }, []); 
 
   const handleQuantityChange = (id, delta) => {
     setCartItems((prevItems) =>
@@ -41,10 +34,12 @@ const AddToCart = () => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
-  const subtotal = cartItems.reduce(
+  // Ensure that cartItems is not undefined and has values
+  const subtotal = cartItems?.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
-  );
+  ) || 0;
+
   const freeShippingThreshold = 75;
 
   return (
@@ -53,55 +48,58 @@ const AddToCart = () => {
         {/* Cart Items Section */}
         <div className="cart-items flex-1 bg-white p-4 lg:p-6 rounded shadow">
           <h2 className="text-lg lg:text-xl font-bold mb-4">Cart Items</h2>
-          {cartItems.map((item) => (
-            <div
-              key={item.id}
-              className="cart-item flex flex-wrap items-center justify-between mb-6 border-b pb-4"
-            >
-              <img
-                className="w-16 h-16 lg:w-20 lg:h-20 rounded"
-                src={item.image}
-                alt={item.name}
-              />
-              <div className="flex flex-col flex-1 ml-4">
-                <p className="text-sm lg:text-base font-medium">{item.name}</p>
-                <p className="text-sm lg:text-base text-gray-500">
-                  {item.color} / {item.size}
-                </p>
-                <button
-                  className="text-red-500  text-sm mt-2"
-                  onClick={() => handleRemove(item.id)}
-                >
-                  Remove
-                </button>
-              </div>
-              <div className="flex flex-col items-center">
-                <p className="text-sm lg:text-base font-medium"> 
-                    <span>Price : </span>
-                  ${item.price.toFixed(2)}
-                </p>
-                <div className="quantity-controls flex items-center mt-2">
+          {cartItems.length > 0 ? (
+            cartItems.map((item) => (
+              <div
+                key={item.id}
+                className="cart-item flex flex-wrap items-center justify-between mb-6 border-b pb-4"
+              >
+                <img
+                  className="w-16 h-16 lg:w-20 lg:h-20 rounded"
+                  src={item.image}
+                  alt={item.name}
+                />
+                <div className="flex flex-col flex-1 ml-4">
+                  <p className="text-sm lg:text-base font-medium">{item.name}</p>
+                  <p className="text-sm lg:text-base text-gray-500">
+                    {item.color} / {item.size}
+                  </p>
                   <button
-                    className="px-2 py-1 border rounded"
-                    onClick={() => handleQuantityChange(item.id, -1)}
+                    className="text-red-500 text-sm mt-2"
+                    onClick={() => handleRemove(item.id)}
                   >
-                    -
-                  </button>
-                  <span className="px-4">{item.quantity}</span>
-                  <button
-                    className="px-2 py-1 border rounded"
-                    onClick={() => handleQuantityChange(item.id, 1)}
-                  >
-                    +
+                    Remove
                   </button>
                 </div>
-                <p className="text-sm lg:text-base font-medium mt-2">
-                <span>Total Price : </span>
-                  ${(item.price * item.quantity).toFixed(2)}
-                </p>
+                <div className="flex flex-col items-center">
+                  <p className="text-sm lg:text-base font-medium">
+                    <span>Price : </span>${item.price.toFixed(2)}
+                  </p>
+                  <div className="quantity-controls flex items-center mt-2">
+                    <button
+                      className="px-2 py-1 border rounded"
+                      onClick={() => handleQuantityChange(item.id, -1)}
+                    >
+                      -
+                    </button>
+                    <span className="px-4">{item.quantity}</span>
+                    <button
+                      className="px-2 py-1 border rounded"
+                      onClick={() => handleQuantityChange(item.id, 1)}
+                    >
+                      +
+                    </button>
+                  </div>
+                  <p className="text-sm lg:text-base font-medium mt-2">
+                    <span>Total Price : </span>$
+                    {(item.price * item.quantity).toFixed(2)}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p>Your cart is empty.</p>
+          )}
         </div>
 
         {/* Cart Summary Section */}
