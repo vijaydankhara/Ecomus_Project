@@ -29,16 +29,16 @@ exports.addToCart = async (req, res) => {
 //  get All Carts
 exports.getAllCarts = async (req, res) => {
     try {
-        let carts = await cartServices.getAllCart({
-            user: req.user._id,
-            isDelete: false
-        });
-        res.status(200).json(carts);
+      const carts = await cartServices.getAllCart({
+        user: req.user._id,
+        isDelete: false
+      });
+      res.status(200).json(carts);
     } catch (error) {
-        console.log(error);
-        res.status(401).json({ message: `Internal Server Error... ${console.error()}` });
+      console.log(error);
+      res.status(401).json({ message: `Internal Server Error... ${console.error()}` });
     }
-};
+  };
 
 
 //  get Cart

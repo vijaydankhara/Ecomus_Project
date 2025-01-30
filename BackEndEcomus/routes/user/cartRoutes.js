@@ -6,7 +6,7 @@ const {userVerifyToken} = require('../../middlewares/userVerifyToken')
 const {addToCart,getAllCarts} = require('../../controller/user/cartController')
 
 cartRoutes.post('/addtocart',userVerifyToken,addToCart);
-cartRoutes.post('/getallcart',getAllCarts);
+cartRoutes.get('/getallcart',userVerifyToken,getAllCarts);
 
 
 module.exports = cartRoutes
