@@ -50,45 +50,37 @@ async getCartById(id) {
         }
     };
 
-    // Get All Cart Services
-    async getAllCart(body) {
-        try {
-          return await Cart.find(body)
-            .populate('productItem', 'title price images')  // Populate productItem with title, price, and images
-            .exec();
-        } catch (error) {
-          console.log(error);
-          return error.message;
-        }
-      }
+   
 
-    // async getAllCart(query, user) {
-    //     try {
-    //         let userCarts = query.me && query.me === 'true' ? [
-    //             {
-    //                 $match: { user: user._id, isDelete: false }
-    //             }
-    //         ] : [];
-    //         let find = [
-    //             { $match: { isDelete: false } },
-    //             ...userCarts,
-    //             {
-    //                 $lookup: {
-    //                     from: "products",
-    //                     localField: 'cartItem',
-    //                     foreignField: '_id',
-    //                     as: 'cartItem'
-    //                 }
-    //             },
-    //             { $set: { "cartItem": { $first: "$cartItem" } } } 
-    //         ];
-    //         let result = await Cart.aggregate(find);
-    //         return result;
-    //     } catch (error) {
-    //         console.log(error);
-    //         return error.message;
-    //     }
-    // };
+    async getAllCart(query, user) {
+        try {
+            let userCarts = query.me && query.me === 'true' ? [
+                { $match: { user: user._id, isDelete: false } }
+            ] : [];
+    
+            let find = [
+                { $match: { isDelete: false } },
+                ...userCarts,
+                {
+                    $lookup: {
+                        from: "products",
+                        localField: 'cartItem',
+                        foreignField: '_id',
+                        as: 'cartItem'
+                    }
+                },
+                { $set: { "cartItem": { $first: "$cartItem" } } }
+              
+            ];
+    
+            let result = await Cart.aggregate(find);
+            return result;
+        } catch (error) {
+            console.log(error);
+            return error.message;
+        }
+    };
+    
 
 
 }

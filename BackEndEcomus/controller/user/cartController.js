@@ -3,42 +3,52 @@ const cartServices = new CartServices();
 
 //Add To Cart
 exports.addToCart = async (req, res) => {
-    try {   
-        let cart = await cartServices.getCart({
-            user: req.user._id,
-            productId: req.body.productId,
-            selectedColor: req.body.selectedColor,  
-            selectedSize: req.body.selectedSize,
-            isDelete: false
-        });
-            if (cart) {
-            return res.json({ message: "This Item Already In Your Cart" });
+    try {
+        const { cartItem, color, size, quantity } = req.body;
+        const userId = req.user?._id;
+
+        if (!userId) {
+            return res.status(401).json({ message: "Unauthorized user" });
         }
+
+        // Find and update the cart item if it exists
+        let cart = await cartServices.getCart({ user: userId, cartItem, color, size, isDelete: false });
+
+        if (cart) {
+            cart.quantity += quantity || 1;
+            await cart.save();
+            return res.status(200).json({ cart, message: "Cart updated successfully!" });
+        }
+
+        // If item does not exist, create a new cart entry
         cart = await cartServices.addToCart({
-            user: req.user._id,
-            ...req.body
+            user: userId,
+            cartItem,
+            color,
+            size,
+            quantity: quantity || 1,
         });
-        return res.status(201).json({ cart, message: "New Item Is Added To The Cart" });
+
+        return res.status(201).json({ cart, message: "New item added to the cart!" });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({ message: `Internal Server Error: ${error.message}` });
     }
 };
 
 
+
 //  get All Carts
 exports.getAllCarts = async (req, res) => {
     try {
-      const carts = await cartServices.getAllCart({
-        user: req.user._id,
-        isDelete: false
-      });
-      res.status(200).json(carts);
+        const carts = await cartServices.getAllCart(req.query, req.user);
+        res.status(200).json(carts);
     } catch (error) {
-      console.log(error);
-      res.status(401).json({ message: `Internal Server Error... ${console.error()}` });
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
-  };
+};
+
 
 
 //  get Cart
