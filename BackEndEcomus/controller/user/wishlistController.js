@@ -26,7 +26,7 @@ exports.addToWishlist = async (req, res) => {
 exports.getAllWishlists = async (req, res) => {
     try {
       // Ensure to populate the cart item data (if you're storing only product IDs)
-      const wishlist = await wishlistServices.getAllWishlist();
+      const wishlist = await wishlistServices.getAllWishlish();
       res.status(200).json(wishlist);
     } catch (error) {
       console.error("Error fetching wishlist:", error);
@@ -34,3 +34,17 @@ exports.getAllWishlists = async (req, res) => {
     }
   };
 
+  exports.deleteWishlish = async (req, res) => {
+    try {
+        let wishlist = await wishlistServices.getWishlist(req.query.Id);
+        if(!wishlist){
+            return res.status(404).json({message:"Wishlist not found."});
+        }
+        console.log(wishlist);
+        wishlist = await wishlistServices.updatewishlist(wishlist._id, {isDelete: true});
+        res.status(201).json({ wishlist: wishlist, message: `Wishlist Item is Deleted Successfully..`});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: `Internal Server Error ${console.error()}`});
+    }
+}; 
