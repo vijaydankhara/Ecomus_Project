@@ -1,12 +1,12 @@
 const Cart = require("../models/cartModel");
 
 module.exports = class CartServices {
-  
+
   // Add to Cart Service
   async addToCart(body) {
     try {
       const { user, cartItem, quantity } = body;
-      
+
       // Check if item already exists in cart
       const existingCartItem = await Cart.findOne({ user, cartItem, isDelete: false });
       if (existingCartItem) {

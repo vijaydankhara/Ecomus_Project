@@ -35,15 +35,15 @@ module.exports = class AuthServices {
       return error.message;
     }
   }
-   // Get All Users
-   async getAllUsers(body){
+  // Get All Users
+  async getAllUsers(body) {
     try {
-        return await User.find(body);
+      return await User.find(body);
     } catch (error) {
-        console.log(error);
-        return error.message;
+      console.log(error);
+      return error.message;
     }
-};
+  };
 
   // Update User
   async updateUser(id, body) {
